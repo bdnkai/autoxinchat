@@ -1,68 +1,46 @@
-import requests
 import cv2
-import numpy as np
 import pytesseract
-from Levenshtein import distance
-from fuzzywuzzy import fuzz
+import requests
+import numpy as np
 
-# download the image from the URL and save it locally
-url = "https://cdn.discordapp.com/attachments/1076623943760347136/1103504005725949952/image.png"
-response = requests.get(url)
-with open("image.png", "wb") as f:
-    f.write(response.content)
+# Download the image using requests
+img_url = "https://cdn.discordapp.com/attachments/1069726036041945098/1103442611852820490/Screenshot_139.png"
+response = requests.get(img_url)
+img_array = np.asarray(bytearray(response.content), dtype=np.uint8)
+img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
 
-# load the image using OpenCV and convert it to grayscale
-image = cv2.imread("image.png")
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Preprocess the image
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+blur = cv2.GaussianBlur(gray, (5, 5), 0.185)
+sharpen_kernel = np.array([[-1, -1, -1], [-1, 9.3, -1], [-1, -1, -1]])
+sharpen = cv2.filter2D(blur, -1, sharpen_kernel)
+thresh = cv2.threshold(sharpen, 20, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+resized_img = cv2.resize(thresh, (350, 500))
 
-# apply some pre-processing to the image
-thresh_value = 150
-thresh = cv2.threshold(gray, thresh_value, 255, cv2.THRESH_BINARY_INV)[1]
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
-morph = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
 
-# show the processed image
-cv2.imshow("Processed Image", morph)
+
+# Apply Tesseract OCR
+config = '-c char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ驳  --oem 3 --psm 11'
+# Apply Tesseract OCR and draw boxes
+boxes = pytesseract.image_to_boxes(img, lang='chi_sim', config=config)
+for box in boxes.splitlines():
+    box = box.split(' ')
+    x,y,w,h = int(box[1]), int(box[2]), int(box[3]), int(box[4])
+    cv2.rectangle(img, (x, img.shape[0]-y), (w, img.shape[0]-h), (0, 0, 255), 2)
+
+cv2.imshow('Resized Image', blur)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-# use Tesseract OCR to extract the text from the image
-config = "--psm 6"
-text = pytesseract.image_to_string(morph, config=config, lang='chi_sim+eng')
-
-# get the bounding boxes of the characters in the image
-boxes = pytesseract.image_to_boxes(morph, lang='chi_sim+eng')
-
-# parse the text to extract the usernames before the colon and draw boxes around the characters
+# Extract the usernames before the colon
 usernames = []
-for line in text.split("\n"):
-    if ":" in line:
-        username = line.split(":")[0].strip()
-        # correct common recognition errors
-        username = username.replace("l", "i")
-        username = username.replace("1", "i")
-        username = username.replace("0", "o")
-        username = username.replace("5", "s")
-        username = username.replace("8", "b")
-        # use Levenshtein distance and fuzzy string matching to correct errors
-        for reference in ["john", "mary", "peter", "jane"]:
-            if distance(username.lower(), reference) <= 1:
-                username = reference.capitalize()
-                break
-            if fuzz.ratio(username.lower(), reference) >= 90:
-                username = reference.capitalize()
-                break
-        # draw boxes around the characters
-        for box in boxes.split("\n"):
-            if box.startswith(username):
-                box_coords = box.split()[1:-1]
-                x, y, w, h = [int(coord) for coord in box_coords]
-                cv2.rectangle(image, (x, image.shape[0]-y), (w, image.shape[0]-h), (0, 255, 0), 2)
+text = pytesseract.image_to_string(blur, lang='chi_sim+eng', config=config)
+lines = text.split('\n')
+for line in lines:
+    if ':' in line:
+        username = line.split(':')[0].strip()
         usernames.append(username)
 
-# show the image with boxes drawn around the characters
-cv2.imshow("OCR Result", image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
+usernames = [result.split(":")[0].replace(" ", "") for result in text.split("\n") if ":" in result]
+usernames = list(set(usernames))
 print(usernames)
