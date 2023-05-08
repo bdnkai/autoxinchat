@@ -41,7 +41,7 @@ def process_image(link):
     config = '-c char_whitelist=你爸爸野爹我命天破聪明绝顶的贪生恶杀abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --oem 3 --psm 12'
 
     usernames = []
-    text = pytesseract.image_to_string(thresh, lang='chi_sim+eng', config=config)
+    text = pytesseract.image_to_string(sharpen, lang='chi_sim', config=config)
     lines = text.split('\n')
     for line in lines:
         if ':X' in line:
@@ -49,7 +49,9 @@ def process_image(link):
             usernames.append(username)
 
     usernames = [result.split(":")[0].replace(" ", "") for result in text.split("\n") if ":" in result]
+    print(usernames)
     clean_names = list(set(clean_list(usernames)))
+    print(clean_names)
 
     return clean_names
 
