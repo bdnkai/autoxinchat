@@ -3,7 +3,7 @@
         {
             "type": "python",
             "name": "main",
-            "workingDir": "X:/Personal_Project/bdn_portfolio/ocr_attendance/src/",
+            "workingDir": "X:/Personal_Project/bdn_portfolio/autoxinchat/app/",
             "arguments": ["main.py"],
         },
 
