@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "type": "python",
+            "name": "main",
+            "workingDir": "X:/Personal_Project/bdn_portfolio/ocr_attendance/src/",
+            "arguments": ["main.py"],
+        },
+
+
+    ]
+}
