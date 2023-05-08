@@ -17,6 +17,7 @@ def clean_list(lst):
 
 def process_image(link):
     response = requests.get(link)
+    print(link)
     img_array = np.array(bytearray(response.content), dtype=np.uint8)
     img = cv2.imdecode(img_array, -1)
 
@@ -36,6 +37,7 @@ def process_image(link):
     sharpen = cv2.addWeighted(gray, alpha, sharpen, -alpha, beta)
     thresh = cv2.threshold(sharpen, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
+
     config = '-c char_whitelist=你爸爸野爹我命天破聪明绝顶的贪生恶杀abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --oem 3 --psm 12'
 
     usernames = []
@@ -48,13 +50,9 @@ def process_image(link):
 
     usernames = [result.split(":")[0].replace(" ", "") for result in text.split("\n") if ":" in result]
     clean_names = list(set(clean_list(usernames)))
-    print(clean_names)
 
     return clean_names
 
 
-def process_links(links):
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = [executor.submit(process_image, link) for link in links]
-        results = [future.result() for future in futures]
-    return results
+
+
