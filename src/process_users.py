@@ -41,7 +41,7 @@ def process_image(link):
     config = '-c char_whitelist=你爸爸野爹我命天破聪明绝顶的贪生恶杀abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ --oem 3 --psm 12'
 
     usernames = []
-    text = pytesseract.image_to_string(sharpen, lang='chi_sim', config=config)
+    text = pytesseract.image_to_string(sharpen, lang='chi_sim+eng', config=config)
     lines = text.split('\n')
     for line in lines:
         if ':X' in line:

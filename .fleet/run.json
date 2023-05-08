@@ -1,10 +1,12 @@
 {
-    "name": "main",
-    "type": "python",
-    "workingDir": "$PROJECT_DIR$",
-    "environment": {
-        "PYTHONUNBUFFERED":"1",
-    },
-    "file": "X:\\Personal_Project\\bdn_portfolio\\scrapeIt_opencv\\main.py",
-},
+    "configurations": [
+        {
+            "type": "python",
+            "name": "main",
+            "workingDir": "X:/Personal_Project/bdn_portfolio/ocr_attendance/src/",
+            "arguments": ["main.py"],
+        },
 
+
+    ]
+}
