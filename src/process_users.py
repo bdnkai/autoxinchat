@@ -10,8 +10,8 @@ from filtered_case import names as name_cases
 def clean_list(lst):
     cleaned_list = []
     case_name = set(name.lower() for name in name_cases)
-    cleaned_list = [difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=0.51)[0]
-                    for item in lst if difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=0.51)]
+    cleaned_list = [difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=0.5)[0]
+                    for item in lst if difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=0.5)]
     return cleaned_list
 
 
