@@ -17,7 +17,6 @@ def clean_list(lst):
 
 def process_image(link):
     response = requests.get(link)
-    print(link)
     img_array = np.array(bytearray(response.content), dtype=np.uint8)
     img = cv2.imdecode(img_array, -1)
 
@@ -49,9 +48,7 @@ def process_image(link):
             usernames.append(username)
 
     usernames = [result.split(":")[0].replace(" ", "") for result in text.split("\n") if ":" in result]
-    print(usernames)
     clean_names = list(set(clean_list(usernames)))
-    print(clean_names)
 
     return clean_names
 
