@@ -6,13 +6,6 @@ import requests
 
 app = Flask(__name__)
 
-# @app.route('/process', methods=['POST'])
-# def process():
-#     url = request.json['url']
-#     usernames = get_usernames(url)
-#     response = {'names': usernames}
-#     return jsonify(response), 200
-
 
 @app.route('/get_usernames', methods=['GET'])
 def get_usernames():
