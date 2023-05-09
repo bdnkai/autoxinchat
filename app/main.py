@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from app.process_users import process_image
+import os
+
+os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/x86_64-linux-gnu/'
 
 app = FastAPI()
 
