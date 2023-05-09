@@ -8,7 +8,6 @@ import os
 
 os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/*'
 
-
 def clean_list(lst):
     cleaned_list = []
     case_name = set(name.lower() for name in name_cases)
