@@ -4,5 +4,6 @@ opencv-python-headless
 pytesseract
 numpy
 requests
+tesseract==4.1.1
 
 
