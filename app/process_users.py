@@ -3,7 +3,6 @@ import difflib
 import numpy as np
 import pytesseract
 import requests
-import concurrent.futures
 from filtered_case import names as name_cases
 
 

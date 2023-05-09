@@ -1,8 +1,5 @@
 from fastapi import FastAPI, Request
-import time
-import concurrent.futures
 from process_users import process_image
-import requests
 
 app = FastAPI()
 
