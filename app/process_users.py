@@ -6,9 +6,8 @@ import requests
 from app.filtered_case import names as name_cases
 import os
 
-os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/x86_64-linux-gnu/'
-<<<<<<< HEAD
->>>>>>> 86cb525be173ff452dae82c2a23deae6a528a1f4
+os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/*'
+
 def clean_list(lst):
     cleaned_list = []
     case_name = set(name.lower() for name in name_cases)
