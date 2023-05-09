@@ -4,6 +4,9 @@ import numpy as np
 import pytesseract
 import requests
 from app.filtered_case import names as name_cases
+import os
+
+os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/x86_64-linux-gnu/'
 
 
 def clean_list(lst):
