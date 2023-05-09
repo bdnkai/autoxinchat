@@ -6,12 +6,9 @@ import requests
 from app.filtered_case import names as name_cases
 import os
 
-<<<<<<< HEAD
-os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/*'
-=======
+
 os.environ['LD_LIBRARY_PATH'] = '/app/.apt/usr/lib/'
 
->>>>>>> 944bc2dc1a60d26eafa31a3badf7850d21be5c27
 
 def clean_list(lst):
     cleaned_list = []
