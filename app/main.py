@@ -16,3 +16,4 @@ async def get_autoxinchat(url : str):
     results = process_image(url)
     return {"names": results}
     
+    
