@@ -3,7 +3,7 @@ import difflib
 import numpy as np
 import pytesseract
 import requests
-from filtered_case import names as name_cases
+from app.filtered_case import names as name_cases
 
 
 def clean_list(lst):

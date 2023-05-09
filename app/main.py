@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from process_users import process_image
+from app.process_users import process_image
 
 app = FastAPI()
 
