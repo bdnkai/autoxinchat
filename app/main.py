@@ -1,22 +1,44 @@
 from fastapi import FastAPI
-from process_users import process_image
-
+from pydantic import BaseModel
+from process_users import process_image, process_debug
 
 
 
 app = FastAPI()
 
+
+
+class Threshold(BaseModel):
+    rate: float = 0.54
+
+
+current_threshold = Threshold()
+
+
 @app.get("/")
 def index():
-    return {"title": "welcome to AutoXinChat"}
+    return {"title": "Welcome to AutoXinChat"}
 
 
-
-@app.get("/process")
+@app.get("/process/")
 async def get_autoxinchat(url : str):
-    results = process_image(url)
+    results = process_image(url, thresh_rate=current_threshold.rate)
     return {"names": results}
 
+@app.get("/debug")
+async def get_autoxinchat(url : str):
+    results = process_debug(url, thresh_rate=current_threshold.rate)
+    return {"message": results}
 
-if __name__ == '__main__':
-    process_image('https://cdn.discordapp.com/attachments/1106293089552846898/1106474957313155122/image.png')
+# @app.post("/add_player")
+# async def update_threshold(threshold: Threshold):
+#     global current_threshold
+#     current_threshold = threshold
+#     return {"message": "Threshold updated", "new_threshold": threshold}
+
+
+@app.patch("/update_threshold")
+async def update_threshold(threshold: Threshold):
+    global current_threshold
+    current_threshold = threshold
+    return {"message": "Threshold updated", "new_threshold": threshold}
