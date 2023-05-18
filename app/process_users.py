@@ -3,12 +3,12 @@ import difflib
 import numpy as np
 import pytesseract
 import requests
-from filtered_case import names as name_cases
 
 
 
-def clean_list(lst, thresh_rate=0.54):
+def clean_list(lst, thresh_rate=0.54, player_names=[]):
     cleaned_list = []
+    name_cases = player_names
     case_name = set(name.lower() for name in name_cases)
     cleaned_list = [difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=thresh_rate)[0]
                     for item in lst if difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=thresh_rate)]
@@ -17,9 +17,10 @@ def clean_list(lst, thresh_rate=0.54):
 
 
 
-def debug_list(lst, thresh_rate=0.54):
+def debug_list(lst, thresh_rate=0.54, player_names=[]):
     clean_list = []
     debug_list = []
+    name_cases = player_names
     case_name = set(name.lower() for name in name_cases)
     for item in lst:
         cleaned_list = [difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=thresh_rate)][0]
@@ -28,7 +29,7 @@ def debug_list(lst, thresh_rate=0.54):
 
         if cleaned_list:
             clean_list.append(clean_results[0])
-            clean_message = f' thresh_rate( {thresh_rate} )|| {item} |to| {clean_results}'
+            clean_message = f'{thresh_rate}| {item} |>>| {clean_results}'
             debug_list.append(clean_message)
             clean_list.append(clean_results[0])
 
@@ -42,7 +43,7 @@ def debug_list(lst, thresh_rate=0.54):
 
 
 
-def process_image(link, thresh_rate=0.54):
+def process_image(link, thresh_rate=0.54, player_names=[]):
     response = requests.get(link)
     img_array = np.array(bytearray(response.content), dtype=np.uint8)
     img = cv.imdecode(img_array, -1)
@@ -78,14 +79,14 @@ def process_image(link, thresh_rate=0.54):
 
 
     usernames = [result.split(":")[0].replace(" ", "") for result in text.split("\n") if ":" in result]
-    clean_names = list(set(clean_list(usernames, thresh_rate)))
+    clean_names = list(set(clean_list(usernames, thresh_rate, player_names)))
 
     return clean_names
 
 
 
 
-def process_debug(link, thresh_rate=0.54):
+def process_debug(link, thresh_rate=0.54, player_names=[]):
 
     response = requests.get(link)
     img_array = np.array(bytearray(response.content), dtype=np.uint8)
@@ -122,7 +123,7 @@ def process_debug(link, thresh_rate=0.54):
 
 
     usernames = [result.split(":")[0].replace(" ", "") for result in text.split("\n") if ":" in result]
-    debug_names = debug_list(usernames, thresh_rate)
+    debug_names = debug_list(usernames, thresh_rate, player_names)
     print(debug_names)
     return debug_names
 
