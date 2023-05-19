@@ -6,13 +6,13 @@ import requests
 
 
 
+
 def clean_list(lst, thresh_rate=0.54, player_names=[]):
     cleaned_list = []
     name_cases = player_names
     case_name = set(name.lower() for name in name_cases)
     cleaned_list = [difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=thresh_rate)[0]
                     for item in lst if difflib.get_close_matches(item.lower(), case_name, n=1, cutoff=thresh_rate)]
-
     return cleaned_list
 
 
@@ -34,12 +34,11 @@ def debug_list(lst, thresh_rate=0.54, player_names=[]):
             clean_list.append(clean_results[0])
 
 
+
     debug_final = list(set(clean_list))
     finalize_list = debug_list, debug_final
 
-
     return finalize_list
-
 
 
 
@@ -126,5 +125,3 @@ def process_debug(link, thresh_rate=0.54, player_names=[]):
     debug_names = debug_list(usernames, thresh_rate, player_names)
     print(debug_names)
     return debug_names
-
-
